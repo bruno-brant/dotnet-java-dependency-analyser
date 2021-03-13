@@ -6,12 +6,12 @@ using Xunit;
 
 namespace TinyJavaParser.Tests
 {
-	public class PackageNameParserTests
+	public class PackageStatementParserTests
 	{
 		[Fact]
 		public void Parse_WhenCodeNull_Throws()
 		{
-			Assert.Throws<ArgumentNullException>(() => JavaGrammar.PackageName.Parse(null));
+			Assert.Throws<ArgumentNullException>(() => JavaGrammar.PackageStatement.Parse(null));
 		}
 
 		[Theory]
@@ -22,9 +22,9 @@ namespace TinyJavaParser.Tests
 		{
 			var packageExpresison = $"package {packageName};";
 
-			var actual = JavaGrammar.PackageName.Parse(packageExpresison);
+			var actual = JavaGrammar.PackageStatement.Parse(packageExpresison);
 
-			Assert.Equal(packageName, string.Join('.', actual.Identifiers));
+			Assert.Equal(packageName, string.Join('.', actual.PackageName.Identifiers));
 		}
 	}
 }

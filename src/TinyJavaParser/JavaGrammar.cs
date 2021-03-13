@@ -11,21 +11,28 @@ namespace TinyJavaParser
 	public static class JavaGrammar
 	{
 		/// <summary>
-		/// Parses a Java identifier.
+		/// Parses an identifier.
 		/// </summary>
 		public static readonly Parser<string> Identifier = Sprache.Parse.LetterOrDigit.Many().Text();
 
 		/// <summary>
-		/// Parses a PackageName statement.
+		/// Parsers a package name.
 		/// </summary>
 		public static readonly Parser<PackageName> PackageName =
-			from packageKeyword in Sprache.Parse.String("package").Once()
-			from space in Sprache.Parse.WhiteSpace.Many()
 			from packageHead in Identifier
 			from packageTail in (from delimiter in Sprache.Parse.Char('.').Once()
 								 from identifier in Identifier
 								 select identifier).Many()
-			from terminator in Sprache.Parse.Char(';')
 			select new PackageName(new[] { packageHead }.Concat(packageTail).ToList());
+
+		/// <summary>
+		/// Parses a package statement.
+		/// </summary>
+		public static readonly Parser<PackageStatement> PackageStatement =
+			from packageKeyword in Sprache.Parse.String("package").Once()
+			from space in Sprache.Parse.WhiteSpace.Many()
+			from packageName in PackageName.Token()
+			from terminator in Sprache.Parse.Char(';')
+			select new PackageStatement(packageName);
 	}
 }
