@@ -12,13 +12,6 @@ namespace TinyJavaParser
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PackageName"/> class.
 		/// </summary>
-		public PackageName()
-		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="PackageName"/> class.
-		/// </summary>
 		/// <param name="identifers">The list of idenfiers that compose the name.</param>
 		public PackageName(List<string> identifers)
 		{
@@ -29,5 +22,11 @@ namespace TinyJavaParser
 		/// Gets the list of identifiers that is the package name.
 		/// </summary>
 		public List<string> Identifiers { get; } = new List<string>();
+
+		/// <inheritdoc/>
+		public override string ToString()
+		{
+			return string.Join('.', Identifiers);
+		}
 	}
 }

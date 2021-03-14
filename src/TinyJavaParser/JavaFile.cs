@@ -17,7 +17,7 @@ namespace TinyJavaParser
 		/// <summary>
 		/// Gets the list of imports present in this file.
 		/// </summary>
-		public List<Import> ImportList { get; } = new List<Import>();
+		public List<ImportStatement> ImportList { get; } = new List<ImportStatement>();
 
 		/// <summary>
 		/// Gets or sets the class that is defined in this file.
