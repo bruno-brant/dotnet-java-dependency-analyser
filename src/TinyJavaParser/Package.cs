@@ -8,8 +8,17 @@ namespace TinyJavaParser
 	public class Package
 	{
 		/// <summary>
-		/// Gets or sets the name of the package declared by this statement.
+		/// Initializes a new instance of the <see cref="Package"/> class.
 		/// </summary>
-		public PackageName PackageName { get; set; }
+		/// <param name="packageName">The name of the package.</param>
+		public Package(PackageName packageName)
+		{
+			PackageName = packageName ?? throw new System.ArgumentNullException(nameof(packageName));
+		}
+
+		/// <summary>
+		/// Gets the name of the package declared by this statement.
+		/// </summary>
+		public PackageName PackageName { get; }
 	}
 }

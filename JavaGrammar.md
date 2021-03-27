@@ -31,4 +31,38 @@ ARGUMENT = LITERAL;
 LITERAL = INTEGER_LITERAL | STRING;
 
 INTEGER_LITERAL = ["+" | "-"] DIGIT { DIGIT };
+
+VISIBILITY = "public" | "protected" | "private";
+
+FIELD_DECLARATION = [ ANNOTATION ] VISIBILITY [ "static" ] [ "final" ] IDENTIFIER [ "[]", ] ["=" EXPRESSION] ";";
+
+EXPRESSION = LITERAL						(* basic case *)
+	| PREFIX { EXPRESSION }					(* prefixing like ++, +, or even new expr. *)
+	| { EXPRESSION } INFIX { EXPRESSION }
+	| { EXPRESSION } SUFFIX
+	| ARRAY_INITIALIZATION
+	| METHOD_CALL
+	| TERNARY_EXPRESSION
+	| CAST_EXPRESSION;
+	| INSTANCING
+
+LITERAL = (* Ommited, we've seen this before *);
+
+PREFIX = "++" | "--" | "!" | "~" | "+" | "-";
+
+INFIX = "||" | "&&" | "|" | "^" | "&" | "==" | "!=" 
+	| "<" | ">"	| "<=" | ">=" | "<<" | ">>" | ">>>" 
+	| "+" | "-" | "*" | "/" | "%";
+
+SUFFIX = "++" | "--";
+
+ARRAY_INITIALIZATION = "{", [{ LITERAL , }] "}"; 		(* this is not exaustive *)
+
+METHOD_CALL = LITERAL, { ".", LITERAL }, "(", ARGUMENT_LIST, ")";			(* again, not exaustive *)
+
+TERNARY_EXPRESSION = EXPRESSION, "?", EXPRESSION, ":", EXPRESSION;
+
+CAST_EXPRESSION = "(", IDENTIFIER, ")", EXPRESSION;
+
+INSTANCING = "new" IDENTIFIER "(" [ARGUMENT_LIST] ")";
 ```

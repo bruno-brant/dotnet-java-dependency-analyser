@@ -13,20 +13,20 @@ namespace TinyJavaParser
 		/// Initializes a new instance of the <see cref="PackageName"/> class.
 		/// </summary>
 		/// <param name="identifers">The list of idenfiers that compose the name.</param>
-		public PackageName(List<string> identifers)
+		public PackageName(ComposedIdentifier identifers)
 		{
-			Identifiers = identifers;
+			ComposedIdentifier = identifers;
 		}
 
 		/// <summary>
 		/// Gets the list of identifiers that is the package name.
 		/// </summary>
-		public List<string> Identifiers { get; } = new List<string>();
+		public ComposedIdentifier ComposedIdentifier { get; }
 
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			return string.Join('.', Identifiers);
+			return string.Join('.', ComposedIdentifier);
 		}
 	}
 }

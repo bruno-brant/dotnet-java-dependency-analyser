@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TinyJavaParser.Tests", "test\TinyJavaParser.Tests\TinyJavaParser.Tests.csproj", "{14BAB6B8-3C85-41DC-8107-DA67F119C720}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TinyJavaParser.Tests", "test\TinyJavaParser.Tests\TinyJavaParser.Tests.csproj", "{14BAB6B8-3C85-41DC-8107-DA67F119C720}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{877574D2-D1E7-42DC-8057-3E4E3C4F5A84}"
 EndProject
@@ -17,6 +17,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DAED8777-FAC2-4B30-A1FA-A6E431157230}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		JavaGrammar.md = JavaGrammar.md
 	EndProjectSection
 EndProject
 Global

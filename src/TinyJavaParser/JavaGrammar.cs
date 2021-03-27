@@ -1,6 +1,7 @@
 // Copyright (c) Bruno Brant. All rights reserved.
 
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Sprache;
 
@@ -17,14 +18,22 @@ namespace TinyJavaParser
 		public static readonly Parser<string> Identifier = Parse.LetterOrDigit.Many().Text();
 
 		/// <summary>
+		/// Parses a <see cref="ComposedIdentifer"/>.
+		/// </summary>
+		public static readonly Parser<ComposedIdentifier> ComposedIdentifer =
+			from head in Identifier
+			from tail in (from delimiter in Parse.Char('.').Once()
+						  from identifier in Identifier
+						  select identifier).Many()
+			let identifierSequence = new[] { head }.Concat(tail)
+			select new ComposedIdentifier(identifierSequence);
+
+		/// <summary>
 		/// Parsers a Java package name.
 		/// </summary>
 		public static readonly Parser<PackageName> PackageName =
-			from packageHead in Identifier
-			from packageTail in (from delimiter in Parse.Char('.').Once()
-								 from identifier in Identifier
-								 select identifier).Many()
-			select new PackageName(new[] { packageHead }.Concat(packageTail).ToList());
+			from composedIdentifier in ComposedIdentifer
+			select new PackageName(composedIdentifier);
 
 		/// <summary>
 		/// Parses a package statement.
@@ -58,7 +67,7 @@ namespace TinyJavaParser
 		public static readonly Parser<IntegerLiteral> IntegerLiteral =
 			from digits in Parse.Digit.AtLeastOnce()
 			let number = string.Concat(digits)
-			let value = int.Parse(number)
+			let value = int.Parse(number, CultureInfo.CurrentCulture)
 			select new IntegerLiteral(value);
 
 		/// <summary>
@@ -86,5 +95,11 @@ namespace TinyJavaParser
 			from extendsKeyword in Parse.String("extends").Token()
 			from baseClassName in Identifier.Token()
 			select new ClassDefinition(Visibility.Public, className, baseClassName, annotation);
+
+		/// <summary>
+		/// Parsers a Java Expression.
+		/// </summary>
+		/// <seealso cref="IExpression"/>.
+		public static readonly Parser<IExpression> Expression;
 	}
 }

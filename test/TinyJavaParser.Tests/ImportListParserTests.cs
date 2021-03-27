@@ -14,7 +14,7 @@ namespace TinyJavaParser.Tests
 		/// Gets data for Parse_WhenValidPackageName_ReturnsStructureWithCorrectName.
 		/// </summary>
 		/// <returns>
-		/// Will return instances of arrays of strings, each containing a single, 
+		/// Will return instances of arrays of strings, each containing a single,
 		/// multiline string that is a bunch of import statements.
 		/// </returns>
 		public static IEnumerable<object[]> ImportLists()

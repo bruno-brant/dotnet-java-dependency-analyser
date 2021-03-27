@@ -15,7 +15,7 @@ namespace TinyJavaParser.Tests
 		{
 			var actual = JavaGrammar.Annotation.Parse(annotation);
 
-			Assert.Equal(parameters, actual.Arguments.Select(_=>_.Value));
+			Assert.Equal(parameters, actual.Arguments.Select(_ => _.Value));
 		}
 	}
 }

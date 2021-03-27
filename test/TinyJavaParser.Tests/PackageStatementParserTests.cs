@@ -24,7 +24,7 @@ namespace TinyJavaParser.Tests
 
 			var actual = JavaGrammar.PackageStatement.Parse(packageExpresison);
 
-			Assert.Equal(packageName, string.Join('.', actual.PackageName.Identifiers));
+			Assert.Equal(packageName, string.Join('.', actual.PackageName.ComposedIdentifier));
 		}
 	}
 }
