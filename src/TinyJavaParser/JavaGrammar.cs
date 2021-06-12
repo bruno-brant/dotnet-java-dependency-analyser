@@ -1,5 +1,6 @@
 // Copyright (c) Bruno Brant. All rights reserved.
 
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -51,7 +52,7 @@ namespace TinyJavaParser
 		public static readonly Parser<ImportStatement> ImportStatement =
 			from importKeyword in Parse.String("import").Token()
 			from packageName in PackageName.Token()
-			from delimiter in Parse.Char(';').Token()
+			from terminator in Parse.Char(';').Token()
 			select new ImportStatement(packageName);
 
 		/// <summary>
@@ -97,9 +98,83 @@ namespace TinyJavaParser
 			select new ClassDefinition(Visibility.Public, className, baseClassName, annotation);
 
 		/// <summary>
-		/// Parsers a Java Expression.
+		/// Parses a string literal.
+		/// </summary>
+		public static readonly Parser<StringLiteral> StringLiteral =
+			from leftQuote in Parse.Char('"')
+			from characters in Parse.CharExcept('"').Many() // TODO: Deal with \" (escaped quote)
+			from rightQuote in Parse.Char('"')
+			select new StringLiteral(string.Concat(characters));
+
+		/// <summary>
+		/// Parses a number literal.
+		/// </summary>
+		public static readonly Parser<LongLiteral> LongLiteral =
+			from digits in Parse.Digit.AtLeastOnce()
+			let number = string.Concat(digits)
+			let value = long.Parse(number, CultureInfo.CurrentCulture)
+			from longSuffix in Parse.Char('L')
+			select new LongLiteral(value);
+
+		///// <summary>
+		///// Parses a single InfixOperator.
+		///// </summary>
+		////public static readonly Parser<InfixOperator> InfixOperator = EnumExtensions.CreateParser<InfixOperator>();
+
+		///// <summary>
+		///// Parses a infix expression.
+		///// </summary>
+		//public static readonly Parser<InfixExpression> InfixExpression =
+		////from leftExpressions in Expression
+		////from @operator in InfixOperator
+		////from rightExpression in Expression
+		////select new InfixExpression(leftExpressions, @operator, rightExpression);
+
+		/// <summary>
+		/// A comma-delimited sequence of <see cref="ILiteral"/>s.
+		/// </summary>
+		public static readonly Parser<IEnumerable<ILiteral>> LiteralExpressionList =
+			from head in LiteralExpression
+			from tail in (from delimiter in Parse.Char(',').Token()
+						  from literal in LiteralExpression.Token()
+						  select literal).Many()
+			select new List<ILiteral>() { head }.Concat(tail.ToList());
+
+		/// <summary>
+		/// Parses any literal expression.
+		/// </summary>
+		public static Parser<ILiteral> LiteralExpression => OneOf<ILiteral>(StringLiteral, IntegerLiteral, LongLiteral);
+
+		/// <summary>
+		/// Parses an array initialization expression.
+		/// </summary>
+		public static readonly Parser<ArrayInitialization> ArrayInitialization =
+			from openCurlyBraces in Parse.Char('{').Token()
+			from literals in LiteralExpressionList.Optional()
+			from closeCurlyBraces in Parse.Char('}').Token()
+			from end in Parse.Char(';')
+			select literals.IsEmpty ? new ArrayInitialization() : new ArrayInitialization(literals.Get()); 
+
+		/// <summary>
+		/// Gets a parser for Java expressions.
 		/// </summary>
 		/// <seealso cref="IExpression"/>.
-		public static readonly Parser<IExpression> Expression;
+		public static Parser<IExpression> Expression => OneOf<IExpression>(
+				StringLiteral, LongLiteral, ArrayInitialization /*, InfixExpression*/);
+
+		private static Parser<T> OneOf<T>(params Parser<T>[] parsers)
+		{
+			if (parsers is null)
+			{
+				throw new ArgumentNullException(nameof(parsers));
+			}
+
+			if (parsers.Length < 1)
+			{
+				throw new ArgumentException("At least one parser should be informed");
+			}
+
+			return parsers.Aggregate((x, y) => x.Or(y));
+		}
 	}
 }

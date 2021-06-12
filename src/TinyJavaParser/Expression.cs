@@ -4,8 +4,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 #pragma warning disable SA1201 // Elements should appear in the correct order
 #pragma warning disable SA1649 // File name should match first type name
@@ -260,8 +258,15 @@ namespace TinyJavaParser
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ArrayInitialization"/> class.
 		/// </summary>
+		public ArrayInitialization()
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ArrayInitialization"/> class.
+		/// </summary>
 		/// <param name="literals">The list of literals that initializes the array.</param>
-		public ArrayInitialization(List<ILiteral> literals)
+		public ArrayInitialization(IEnumerable<ILiteral> literals)
 		{
 			Literals = literals ?? throw new ArgumentNullException(nameof(literals));
 		}
@@ -269,7 +274,7 @@ namespace TinyJavaParser
 		/// <summary>
 		/// Gets the list of literals that initializes the array.
 		/// </summary>
-		public List<ILiteral> Literals { get; }
+		public IEnumerable<ILiteral> Literals { get; } = new List<ILiteral>();
 	}
 
 	/// <summary>

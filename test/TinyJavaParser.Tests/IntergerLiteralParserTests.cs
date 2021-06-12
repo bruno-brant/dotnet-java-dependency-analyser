@@ -6,7 +6,7 @@ using Xunit;
 
 namespace TinyJavaParser.Tests
 {
-	public class IntergerLiteralParserTests
+	public class IntegerLiteralParserTests
 	{
 		[Theory]
 		[InlineData(11)]

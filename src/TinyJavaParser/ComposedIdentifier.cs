@@ -47,7 +47,7 @@ namespace TinyJavaParser
 		/// <inheritdoc/>
 		public override string ToString()
 		{
-			return string.Join('.', this);
+			return string.Join('.', Identifiers);
 		}
 	}
 }
